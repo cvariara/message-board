@@ -1,5 +1,19 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div(class="container")
+    h1= title
+    div(class="messages")
+      each message in messages
+        div(class="message")
+          div(class="person-info")
+            p(class="person-name")= message.user
+            p(class="person-date")= message.added
+          p(class="message-text")=  message.text
+    form(action="/", method="POST")
+      p(class="form-text")
+        input(type="text", value='', name='user' placeholder="Username", required=true, maxlength="50")
+        br
+        input(type="text", value='', name='message' placeholder="Message", required=true, maxlength="50")
+      input(type="submit" value="Submit")
+
