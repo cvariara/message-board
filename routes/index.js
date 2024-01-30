@@ -1,48 +1,31 @@
 const express = require("express");
 const router = express.Router();
+const Messages = require('../models/messages');
 
-const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-let date = new Date().toLocaleString("en-US", {
-  timeZone: userTimeZone,
-  hour: "2-digit",
-  minute: "2-digit",
-  year: "numeric",
-  month: "numeric",
-  day: "numeric",
+router.get("/", async (req, res, next) => {
+  try {
+    const messages = await Messages.find().sort({ timestamp: -1 });
+    res.render("index", { title: "Mini Message Board", messages });
+  } catch (err) {
+    next(err);
+  }
 });
 
-const messages = [
-  {
-    text: "Hello World!",
-    user: "Chris",
-    added: date,
-  },
-  {
-    text: "Hello Chris!",
-    user: "Bob",
-    added: date,
-  },
-];
+router.post("/", async (req, res, next) => {
+  const { user, message } = req.body;
 
-/* GET home page. */
-router.get("/", (req, res, next) => {
-  res.render("index", { title: "Mini Message Board", messages: messages });
-});
+  try {
+    const newMessage = new Messages({
+      name: user,
+      message,
+    });
 
-router.post("/", (req, res, next) => {
-  messages.push({
-    text: req.body.message,
-    user: req.body.user,
-    added: new Date().toLocaleString("en-US", {
-      timeZone: userTimeZone,
-      hour: "2-digit",
-      minute: "2-digit",
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-    }),
-  });
-  res.redirect("/");
+    await newMessage.save();
+
+    res.redirect("/");
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;

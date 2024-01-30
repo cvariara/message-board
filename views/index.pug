@@ -7,9 +7,9 @@ block content
       each message in messages
         div(class="message")
           div(class="person-info")
-            p(class="person-name")= message.user
-            p(class="person-date")= message.added
-          p(class="message-text")=  message.text
+            p(class="person-name")= message.name
+            p(class="person-date")= message.timestamp
+          p(class="message-text")=  message.message
     form(action="/", method="POST")
       p(class="form-text")
         input(type="text", value='', name='user' placeholder="Username", required=true, maxlength="50")
