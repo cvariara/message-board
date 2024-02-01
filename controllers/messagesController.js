@@ -9,7 +9,6 @@ const getMessages = async (req, res, next) => {
     // Convert timestamp strings to Date objects
     const formattedMessages = messages.map(message => ({
       ...message._doc,
-      //timestamp: format(new Date(message.timestamp), 'MM-dd-yyyy HH:mm')
       timestamp: formatDistanceToNow(new Date(message.timestamp), { addSuffix: true })
     }));
 
