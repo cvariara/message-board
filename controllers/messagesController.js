@@ -1,17 +1,16 @@
-const express = require("express");
-const router = express.Router();
 const Messages = require('../models/messages');
 
-router.get("/", async (req, res, next) => {
+// get messages
+const getMessages = async (req, res, next) => {
   try {
     const messages = await Messages.find().sort({ timestamp: -1 });
     res.render("index", { title: "Mini Message Board", messages });
   } catch (err) {
     next(err);
   }
-});
+}
 
-router.post("/", async (req, res, next) => {
+const postMessages = async (req, res, next) => {
   const { user, message } = req.body;
 
   try {
@@ -26,6 +25,9 @@ router.post("/", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+}
 
-module.exports = router;
+module.exports = {
+  getMessages,
+  postMessages
+}
